@@ -2,8 +2,23 @@
   <head>
     <title>Title</title>
   </head>
-  <body>
-      <h1>Hello!</h1>
-  </body>
+  <h1>Login</h1>
+
+  {% if error %}
+  	<p class=error><strong> Error: </strong> {{ error }}
+  {% endif %}
+
+  <form action="" method=post>
+		<input type=text name=username>
+		<input type=password name=password>
+		<input type=submit value=Login>
+	</form>
+
+	{% for message in get_flashed_messages() %}
+		<div class=flash>
+			{{ message }}
+		</div>
+	{% endfor %}
+
   <p><a href="http://localhost:5001/reader">here</a></p>
 </html>
