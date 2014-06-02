@@ -1,6 +1,7 @@
 import os
 import sqlite3
 import random
+import urllib2
 from flask import *
 from functools import wraps
 
@@ -75,7 +76,11 @@ def test():
 
 @app.route('/get_public_key')
 def web_get_public_key():
-	return redirect('http://localhost:5001/get_public_key')
+	return urllib2.urlopen("http://localhost:5001/reader_get_public_key").read();
+
+@app.route('/reader_get_public_key', methods=['GET'])
+def reader_get_public_key():
+	return jsonify(public_key=get_public_key())
 
 def check_in_db(username, password):
 	g.db = connect_db()
