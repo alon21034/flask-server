@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import random
 from flask import *
 from functools import wraps
 
@@ -8,6 +9,15 @@ app = Flask(__name__)
 DATABASE = 'test.db'
 app.secret_key = 'secret'
 app.config.from_object(__name__)
+
+def get_public_key():
+	return (hex)((int)(random.getrandbits(128)))
+
+def get_device_UUID():
+	return (hex)((int)(random.getrandbits(128)))
+
+def get_signature():
+	return (hex)((int)(random.getrandbits(128)))
 
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
@@ -62,6 +72,10 @@ def test():
 	g.db = connect_db()
 	cur = g.db.execute('select * from USER')
 	return cur.fetchall()[0][0]
+
+@app.route('/get_public_key')
+def web_get_public_key():
+	return redirect('http://localhost:5001/get_public_key')
 
 def check_in_db(username, password):
 	g.db = connect_db()
