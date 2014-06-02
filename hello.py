@@ -76,7 +76,7 @@ def test():
 
 @app.route('/get_public_key')
 def web_get_public_key():
-	return urllib2.urlopen("http://localhost:5001/reader_get_public_key").read();
+	return urllib2.urlopen("http://www.google.com").read();
 
 @app.route('/reader_get_public_key', methods=['GET'])
 def reader_get_public_key():
