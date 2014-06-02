@@ -76,7 +76,7 @@ def test():
 
 @app.route('/get_public_key')
 def web_get_public_key():
-	return urllib2.urlopen("http://140.112.24.8:5001/").read();
+	return urllib2.urlopen("http://localhost:5001/reader_get_public_key").read();
 
 @app.route('/reader_get_public_key', methods=['GET'])
 def reader_get_public_key():
@@ -96,4 +96,4 @@ def connect_db():
 	return sqlite3.connect(app.config['DATABASE'])
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run(port=5001, debug=True)
