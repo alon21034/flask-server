@@ -76,7 +76,7 @@ def test():
 
 @app.route('/get_public_key')
 def web_get_public_key():
-	return redirect(url_for("http://localhost:5000/reader_get_public_key"))
+	return redirect(url_for("http://google.com.tw"))
 
 @app.route('/reader_get_public_key', methods=['GET'])
 def reader_get_public_key():
