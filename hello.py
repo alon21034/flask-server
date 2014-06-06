@@ -94,14 +94,14 @@ def test_urllib():
 
 def post(url, data):
 	print 'a'
-    req = urllib2.Request(url)  
-    print 'b'
-    data = urllib.urlencode(data)  
-    print 'c'
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())  
-    print 'd'
-    response = opener.open(req, data)  
-    return response.read()  
+	req = urllib2.Request(url)
+	print 'b'
+	data = urllib.urlencode(data)
+	print 'c'
+	opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
+	print 'd'
+	response = opener.open(req, data)
+	return response.read()  
 
 def save_in_db(username, password):
 	g.db = connect_db()
