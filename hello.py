@@ -92,10 +92,14 @@ def reader_get_public_key():
 def test_urllib():
 	return post('http://nfc-auth-solution.herokuapp.com/', {'username':'admin', 'password':'admin'})
 
-def post(url, data):  
+def post(url, data):
+	print 'a'
     req = urllib2.Request(url)  
+    print 'b'
     data = urllib.urlencode(data)  
+    print 'c'
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())  
+    print 'd'
     response = opener.open(req, data)  
     return response.read()  
 
