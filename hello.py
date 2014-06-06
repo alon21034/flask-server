@@ -1,7 +1,7 @@
 import os
 import sqlite3
 import random
-import urllib2
+import urllib, urllib2
 from flask import *
 from functools import wraps
 
@@ -83,8 +83,15 @@ def reader_get_public_key():
 
 	public_key=get_public_key()
 	url = request.args.get('return_to%s' % s)
-	print request.args.get('return_to')
-	return jsonify(public_key=get_public_key())
+	data = {'public_key':get_public_key(), 'username':'admin', 'password':'admin'}
+	return post(url, data)
+
+def post(url, data):  
+    req = urllib2.Request(url)  
+    data = urllib.urlencode(data)  
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())  
+    response = opener.open(req, data)  
+    return response.read()  
 
 def save_in_db(username, password):
 	g.db = connect_db()
