@@ -11,13 +11,13 @@ DATABASE = 'test.db'
 app.secret_key = 'secret'
 app.config.from_object(__name__)
 
-def get_public_key():
+def py_get_public_key(server_info):
 	return (hex)((int)(random.getrandbits(128)))
 
-def get_device_UUID():
+def py_get_device_UUID(nonce):
 	return (hex)((int)(random.getrandbits(128)))
 
-def get_signature():
+def py_get_signed_nonce(nonce):
 	return (hex)((int)(random.getrandbits(128)))
 
 @app.route('/index', methods=['GET', 'POST'])
@@ -60,10 +60,7 @@ def register():
 	if request.method == 'POST':
 		username = request.form['username']
 		password = request.form['password']
-		g.db = connect_db()
-		cur = g.db.execute("insert into USER values('%s','%s')" % (username, password))
-		g.db.commit()
-		g.db.close()
+		
 		return redirect(url_for('index'))
 
 	return render_template('register.html')
@@ -76,11 +73,24 @@ def test():
 
 @app.route('/get_public_key')
 def web_get_public_key():
-	return redirect("http://localhost:5000/reader_get_public_key")
+	print 'get_public_key'
+
+	return redirect("http://localhost:5000/reader_get_public_key?return_to=%s" % request.host)
 
 @app.route('/reader_get_public_key', methods=['GET'])
 def reader_get_public_key():
+	print 'reader_get_public_key'
+
+	public_key=get_public_key()
+	url = request.args.get('return_to%s' % s)
+	print request.args.get('return_to')
 	return jsonify(public_key=get_public_key())
+
+def save_in_db(username, password):
+	g.db = connect_db()
+	cur = g.db.execute("insert into USER values('%s','%s')" % (username, password))
+	g.db.commit()
+	g.db.close()
 
 def check_in_db(username, password):
 	g.db = connect_db()
