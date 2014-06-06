@@ -86,20 +86,13 @@ def reader_get_public_key():
 	url = request.args.get('http://%s/' % remote)
 	public_key=py_get_public_key(url)
 	data = {'public_key':public_key, 'username':'admin', 'password':'admin'}
-	return post(url, data)
-
-@app.route('/test_urllib')
-def test_urllib():
-	return post('http://nfc-auth-solution.herokuapp.com/', {'username':'admin', 'password':'admin'})
+	para = urllib.urlencode(data)
+	return redirect("%s?%s" % (url, para))
 
 def post(url, data):
-	print 'a'
 	req = urllib2.Request(url)
-	print 'b'
 	data = urllib.urlencode(data)
-	print 'c'
 	opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
-	print 'd'
 	response = opener.open(req, data)
 	return response.read()  
 
