@@ -81,10 +81,16 @@ def web_get_public_key():
 def reader_get_public_key():
 	print 'reader_get_public_key'
 
-	public_key=get_public_key()
-	url = request.args.get('return_to%s' % s)
-	data = {'public_key':get_public_key(), 'username':'admin', 'password':'admin'}
+	remote = request.args.get('return_to')
+	print remote
+	url = request.args.get('http://%s/' % remote)
+	public_key=py_get_public_key(url)
+	data = {'public_key':public_key, 'username':'admin', 'password':'admin'}
 	return post(url, data)
+
+@app.route('/test_urllib')
+def test_urllib():
+	return post('http://nfc-auth-solution.herokuapp.com/', {'username':'admin', 'password':'admin'})
 
 def post(url, data):  
     req = urllib2.Request(url)  
