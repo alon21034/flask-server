@@ -81,9 +81,10 @@ def test():
 
 @app.route('/smart_register')
 def smart_register():
-
+	return 'test'
 @app.route('/smart_login')
 def smart_login():
+	return 'test'
 
 @app.route('/get_public_key')
 def web_get_public_key():
