@@ -14,12 +14,22 @@
 		<input type=submit value=Login>
 	</form>
 
-	{% for message in get_flashed_messages() %}
+  {% for message in get_flashed_messages() %}
 		<div class=flash>
-			{{ message }}
+		{{ message }}
 		</div>
-	{% endfor %}
+  {% endfor %}
 
+  <form action="/get_public_key" method=get>
+  	<input type=submit value=Login>
+  </form>
+
+  {% if public_key %}
+    <p class=error><strong>Test: </strong>{{ public_key }}
+  {% endif %}
+
+</br>
+</br>
 	<a href="/register">register</a>
 </br>
 </br>

@@ -32,6 +32,14 @@ def index():
 		else:
 			error = 'Invalid credentials, try again!'
 
+	if request.args.get('public_key'):
+	
+
+
+		return redirect(url_for('index'))
+	else:
+		public_key = None
+	
 	return render_template('index.html', error=error)
 
 def login_required(test):
@@ -71,10 +79,15 @@ def test():
 	cur = g.db.execute('select * from USER')
 	return cur.fetchall()[0][0]
 
+@app.route('/smart_register')
+def smart_register():
+
+@app.route('/smart_login')
+def smart_login():
+
 @app.route('/get_public_key')
 def web_get_public_key():
 	print 'get_public_key'
-
 	return redirect("http://localhost:5000/reader_get_public_key?return_to=%s" % request.host)
 
 @app.route('/reader_get_public_key', methods=['GET'])
@@ -83,9 +96,10 @@ def reader_get_public_key():
 
 	remote = request.args.get('return_to')
 	print remote
-	url = request.args.get('http://%s/' % remote)
-	public_key=py_get_public_key(url)
-	data = {'public_key':public_key, 'username':'admin', 'password':'admin'}
+	url = 'http://%s/' % remote
+	public_key = py_get_public_key(url)
+	data = {'public_key':public_key}
+	print public_key
 	para = urllib.urlencode(data)
 	return redirect("%s?%s" % (url, para))
 
