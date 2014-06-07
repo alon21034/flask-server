@@ -18,13 +18,24 @@ def py_smart_login(nonce):
 	return py_get_device_UUID(), py_get_signed_nonce(nonce)
 
 def py_get_public_key(server_info):
-	return (hex)((int)(random.getrandbits(128)))
+	return getCommands(["./get-signature", "%s" % nonce])
 
 def py_get_device_UUID():
 	return (hex)((int)(random.getrandbits(128)))
 
 def py_get_signed_nonce(nonce):
 	return (hex)((int)(random.getrandbits(128)))
+
+def getCommands(command):
+  lines = ""
+  output = ""
+  solver = subprocess.Popen(
+      command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+  
+  output += solver.communicate(lines)[0]
+  while solver.poll():
+		output += solver.communicate()[0]
+  return output
 
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
