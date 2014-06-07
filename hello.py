@@ -36,7 +36,7 @@ def index():
 			error = 'Invalid credentials, try again!'
 
 	if request.args.get('public_key') and request.args.get('UUID') :
-		flash(jsonify(public_key=request.args.get('public_key'), uuid=request.args.get('UUID')))
+		flash({'public_key':request.args.get('public_key'), 'uuid':request.args.get('UUID')})
 		return redirect(url_for('index'))
 	else:
 		public_key = None
@@ -102,7 +102,7 @@ def reader_get_public_key():
 	url = 'http://%s/' % remote
 	public_key, uuid = py_smart_register(url)
 	data = {'public_key':public_key, 'uuid':uuid}
-	print public_key
+	print data
 	para = urllib.urlencode(data)
 	return redirect("%s?%s" % (url, para))
 
