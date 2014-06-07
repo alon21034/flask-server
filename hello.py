@@ -101,7 +101,7 @@ def reader_get_public_key():
 	print remote
 	url = 'http://%s/' % remote
 	public_key, uuid = py_smart_register(url)
-	data = {'public_key':public_key, 'uuid'=uuid}
+	data = {'public_key':public_key, 'uuid':uuid}
 	print public_key
 	para = urllib.urlencode(data)
 	return redirect("%s?%s" % (url, para))
