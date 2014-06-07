@@ -11,13 +11,16 @@ DATABASE = 'test.db'
 app.secret_key = 'secret'
 app.config.from_object(__name__)
 
-def py_smart_register(server_info):
-	return py_get_public_key(server_info), py_get_device_UUID(server_info)
+def py_smart_register(nonce):
+	return py_get_public_key(nonce), py_get_device_UUID()
+
+def py_smart_login(nonce):
+	return py_get_device_UUID(), py_get_signed_nonce(nonce)
 
 def py_get_public_key(server_info):
 	return (hex)((int)(random.getrandbits(128)))
 
-def py_get_device_UUID(nonce):
+def py_get_device_UUID():
 	return (hex)((int)(random.getrandbits(128)))
 
 def py_get_signed_nonce(nonce):
@@ -98,7 +101,7 @@ def smart_register():
 
 @app.route('/smart_login')
 def smart_login():
-	return 'test'
+	return redirect("http://localhost:5000/reader_smart_login?return_to=%s" % request.host)
 
 @app.route('/get_public_key')
 def web_get_public_key():
@@ -116,6 +119,19 @@ def reader_get_public_key():
 	data = {'public_key':public_key, 'uuid':uuid}
 	print data
 	para = urllib.urlencode(data)
+	return redirect("%s?%s" % (url, para))
+
+@app.route('/reader_smart_login', methods=['GET'])
+def reader_get_signed_nonce():
+	print 'reader_smart_login'
+
+	remote = request.args.get('return_to')
+	print remote
+	url = 'http://%s/' % remote
+	uuid, signed_nonce = py_smart_login(url)
+	data = {'uuid':uuid, 'signed_nonce':signed_nonce}
+	print data
+	para - urllib.urlencode(data)
 	return redirect("%s?%s" % (url, para))
 
 def post(url, data):
