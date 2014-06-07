@@ -54,6 +54,9 @@ docs/_build/
 
 *.*~
 
+get-*
+test
+
 venv
 *.pyc
 
