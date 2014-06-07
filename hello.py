@@ -35,12 +35,23 @@ def index():
 		else:
 			error = 'Invalid credentials, try again!'
 
-	if request.args.get('public_key') and request.args.get('uuid') :
-		flash({'public_key':request.args.get('public_key'), 'uuid':request.args.get('uuid')})
+	data = {}
+	if request.args.get('public_key'):
+		data['public'] = request.args.get('public_key')
+
+	if request.args.get('uuid'):
+		data['uuid'] = request.args.get('uuid')
+
+	if request.args.get('signed_nonce'):
+		data['signed_nonce'] = request.args.get('signed_nonce')
+
+	if data != {}:
+		flash(data)
 		return redirect(url_for('index'))
 	else:
 		public_key = None
-
+		uuid = None
+		signed_nonce = None
 	
 	return render_template('index.html', error=error)
 
@@ -83,7 +94,7 @@ def test():
 
 @app.route('/smart_register')
 def smart_register():
-	return redirect("http://localhost:5000/reader_get_public_key?return_to=%s" % request.host)
+	return redirect("http://localhost:5000/reader_smart_register?return_to=%s" % request.host)
 
 @app.route('/smart_login')
 def smart_login():
@@ -92,11 +103,11 @@ def smart_login():
 @app.route('/get_public_key')
 def web_get_public_key():
 	print 'get_public_key'
-	return redirect("http://localhost:5000/reader_get_public_key?return_to=%s" % request.host)
+	return redirect("http://localhost:5000/reader_smart_register?return_to=%s" % request.host)
 
-@app.route('/reader_get_public_key', methods=['GET'])
+@app.route('/reader_smart_register', methods=['GET'])
 def reader_get_public_key():
-	print 'reader_get_public_key'
+	print 'reader_smart_register'
 
 	remote = request.args.get('return_to')
 	print remote
