@@ -23,6 +23,14 @@
   <form action="/get_public_key" method=get>
   	<input type=submit value=Login>
   </form>
+  </br>
+  <form action="/smart_register" method=get>
+    <input type=submit value=Smart Register>
+  </form>
+  </br>
+  <form action="/smart_login" method=get>
+    <input type=submit value=Smart Login>
+  </form>
 
   {% if public_key %}
     <p class=error><strong>Test: </strong>{{ public_key }}
