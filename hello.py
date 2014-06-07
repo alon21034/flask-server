@@ -131,7 +131,7 @@ def reader_get_signed_nonce():
 	uuid, signed_nonce = py_smart_login(url)
 	data = {'uuid':uuid, 'signed_nonce':signed_nonce}
 	print data
-	para - urllib.urlencode(data)
+	para = urllib.urlencode(data)
 	return redirect("%s?%s" % (url, para))
 
 def post(url, data):
