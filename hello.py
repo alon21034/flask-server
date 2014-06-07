@@ -11,6 +11,9 @@ DATABASE = 'test.db'
 app.secret_key = 'secret'
 app.config.from_object(__name__)
 
+def py_smart_register(server_info):
+	return py_get_public_key(server_info), py_get_device_UUID(server_info)
+
 def py_get_public_key(server_info):
 	return (hex)((int)(random.getrandbits(128)))
 
@@ -32,8 +35,8 @@ def index():
 		else:
 			error = 'Invalid credentials, try again!'
 
-	if request.args.get('public_key'):
-		flash(request.args.get('public_key'))
+	if request.args.get('public_key') and request.args.get('UUID') :
+		flash(jsonify(public_key=request.args.get('public_key'), uuid=request.args.get('UUID')))
 		return redirect(url_for('index'))
 	else:
 		public_key = None
@@ -97,7 +100,7 @@ def reader_get_public_key():
 	remote = request.args.get('return_to')
 	print remote
 	url = 'http://%s/' % remote
-	public_key = py_get_public_key(url)
+	public_key, uuid = py_smart_register(url)
 	data = {'public_key':public_key}
 	print public_key
 	para = urllib.urlencode(data)
