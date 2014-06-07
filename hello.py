@@ -35,11 +35,12 @@ def index():
 		else:
 			error = 'Invalid credentials, try again!'
 
-	if request.args.get('public_key') and request.args.get('UUID') :
+	if request.args.get('public_key') and request.args.get('uuid') :
 		flash({'public_key':request.args.get('public_key'), 'uuid':request.args.get('UUID')})
 		return redirect(url_for('index'))
 	else:
 		public_key = None
+
 	
 	return render_template('index.html', error=error)
 
