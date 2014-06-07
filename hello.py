@@ -33,9 +33,7 @@ def index():
 			error = 'Invalid credentials, try again!'
 
 	if request.args.get('public_key'):
-	
-
-
+		flash(request.args.get('public_key'))
 		return redirect(url_for('index'))
 	else:
 		public_key = None
@@ -81,7 +79,8 @@ def test():
 
 @app.route('/smart_register')
 def smart_register():
-	return 'test'
+	return redirect("http://localhost:5000/reader_get_public_key?return_to=%s" % request.host)
+
 @app.route('/smart_login')
 def smart_login():
 	return 'test'
