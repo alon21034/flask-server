@@ -84,6 +84,7 @@ def index():
 	if request.args.get('signed_nonce'):
 		data['signed_nonce'] = request.args.get('signed_nonce')
 
+	print data
 	if data != {} and data['uuid'] != None and data['public'] != None and data['signed_nonce'] == None:
 	  print 'REGISTER SUCCESS'
 	  flash(data)
