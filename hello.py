@@ -17,7 +17,8 @@ def py_smart_register(nonce):
 def py_smart_login(nonce):
 	return py_get_device_UUID(), py_get_signed_nonce(nonce)
 
-def py_get_public_key(server_info):
+def py_get_public_key(nonce):
+	print getCommands(["./get-signature", "%s" % nonce])
 	return getCommands(["./get-signature", "%s" % nonce])
 
 def py_get_device_UUID():
