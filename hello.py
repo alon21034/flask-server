@@ -99,6 +99,8 @@ def index():
 	  else:
 	    flash('wrong credentials')
 	else:
+		print data
+		print 'fail'
 	  # flash('error')
 	  public_key = None
 	  uuid = None
