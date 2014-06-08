@@ -93,7 +93,7 @@ def index():
 	  print 'LOGIN TEST'
 	  flash(data)
 	  if check_in_db(data['uuid'], data['signed_nonce']):
-	    session['logged_in'] = Ture
+	    session['logged_in'] = True
 	    return redirect(url_for('hello'))
 	  else:
 	    flash('wrong credentials')
