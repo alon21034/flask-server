@@ -18,15 +18,22 @@ def py_smart_register(nonce):
 	print 'py_smart_register'
 	print nonce
 	public_key = py_get_public_key(nonce)
+
 	time.sleep(1)
 	uuid = py_get_device_UUID()
 	return public_key, uuid
+
+def parsePublicKey(key):
+	return key.encode('utf-8')
+
+def parseUUID(uuid):
+	return uuid.encode('utf-8')
 
 def py_smart_login(nonce):
 	return py_get_device_UUID(), py_get_signed_nonce(nonce)
 
 def py_get_public_key(nonce):
-	return getCommands(["./get-signature", "%s" % 'aaaa'])
+	return getCommands(["./get-signature", "%s%s" % 'aaaa' nonce])
 
 def py_get_device_UUID():
 	return getCommands(["./get-signature", "%s" % 'bbbb']) 
@@ -105,7 +112,7 @@ def register():
 	if request.method == 'POST':
 		username = request.form['username']
 		password = request.form['password']
-		
+		save_in_db(username, password)
 		return redirect(url_for('index'))
 
 	return render_template('register.html')
@@ -136,7 +143,12 @@ def reader_get_public_key():
 	remote = request.args.get('return_to')
 	print remote
 	url = 'http://%s/' % remote
-	public_key, uuid = py_smart_register(url)
+	a = ""
+	l = [hex(ord(c)) for c in url]
+	for c in l:
+		a += c[2]
+		a += c[3]
+	public_key, uuid = py_smart_register(a)
 	data = {'public_key':public_key, 'uuid':uuid}
 	print data
 	para = urllib.urlencode(data)
