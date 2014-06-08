@@ -26,10 +26,10 @@ def py_smart_register(nonce):
 def py_smart_login(nonce):
   print 'py_smart_login'
   print nonce
-  public_key = py_get_public_key(nonce)
+  signed_nonce = py_get_signed_nonce(nonce)
   time.sleep(1)
   uuid = py_get_device_UUID()
-  return public_key, uuid
+  return signed_nonce, uuid
 
 def py_get_public_key(nonce):
 	public_key = getCommands(["./get-signature", "%s%s" % ('aaaa', nonce)])
@@ -42,7 +42,9 @@ def py_get_device_UUID():
 	return uuid
 
 def py_get_signed_nonce(nonce):
-	return (hex)((int)(random.getrandbits(128)))
+	signed_nonce = getCommands(["./get-signature", "%s%s" % ('aaaa', nonce)])
+	signed_nonce = signed_nonce[6:-7].replace(" ","")
+	return signed_nonce
 
 def getCommands(command):
   lines = ""
@@ -77,18 +79,24 @@ def index():
 		data['public'] = request.args.get('public_key')
 
 	if request.args.get('uuid'):
-		data['uuid'] = request.args.get('uuid').encode('utf-8')
+		data['uuid'] = request.args.get('uuid')
 
 	if request.args.get('signed_nonce'):
 		data['signed_nonce'] = request.args.get('signed_nonce')
 
-	if data != {} and data['uuid'] != None and data['public'] != None:
+	if data != {} and data['uuid'] != None and data['public'] != None and data['signed_nonce'] == None:
 	  print 'REGISTER SUCCESS'
 	  flash(data)
 	  save_in_db(data['uuid'], data['public'])
 	  return redirect(url_for('index'))
+	elif data != {} and data['uuid'] != None and data['public'] == None and data['signed_nonce]'] != None:
+	  print 'LOGIN TEST'
+	  flash(data)
+	  if check_in_db(data['uuid'], data['signed_nonce']):
+	    session['logged_in'] = Ture
+	    return redirect(url_for('hello'))
 	else:
-	  flash('error')
+	  # flash('error')
 	  public_key = None
 	  uuid = None
 	  signed_nonce = None
@@ -173,8 +181,8 @@ def reader_get_signed_nonce():
   for c in l:
     a += c[2]
     a += c[3]
-  public_key, uuid = py_smart_login(a)
-  data = {'public_key':public_key, 'uuid':uuid}
+  signed_nonce, uuid = py_smart_login(a)
+  data = {'signed_nonce':signed_nonce, 'uuid':uuid}
   print data
   para = urllib.urlencode(data)
   return redirect("%s?%s" % (url, para))
