@@ -90,7 +90,7 @@ def index():
 	  flash(data)
 	  save_in_db(data['uuid'], data['public'])
 	  return redirect(url_for('index'))
-	elif data != {} and data['uuid'] != None and data['public'] == None and data['signed_nonce]'] != None:
+	elif data != {} and data['uuid'] != None and data['public'] == None and data['signed_nonce'] != None:
 	  print 'LOGIN TEST'
 	  flash(data)
 	  if check_in_db(data['uuid'], data['signed_nonce']):
