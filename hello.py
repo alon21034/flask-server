@@ -23,23 +23,22 @@ def py_smart_register(nonce):
 	uuid = py_get_device_UUID()
 	return public_key, uuid
 
-def parsePublicKey(key):
-	return key.encode('utf-8')
-
-def parseUUID(uuid):
-	return uuid.encode('utf-8')
-
 def py_smart_login(nonce):
-	return py_get_device_UUID(), py_get_signed_nonce(nonce)
+  print 'py_smart_login'
+  print nonce
+  public_key = py_get_public_key(nonce)
+  time.sleep(1)
+  uuid = py_get_device_UUID()
+  return public_key, uuid
 
 def py_get_public_key(nonce):
 	public_key = getCommands(["./get-signature", "%s%s" % ('aaaa', nonce)])
-	public_key = public_key[2:-1].replace(" ","")
+	public_key = public_key[6:-7].replace(" ","")
 	return public_key
 
 def py_get_device_UUID():
 	uuid = getCommands(["./get-signature", "%s" % 'bbbb']) 
-	uuid = uuid[2:-1].replace(" ","")
+	uuid = uuid[6:-7].replace(" ","")
 	return uuid
 
 def py_get_signed_nonce(nonce):
@@ -71,22 +70,28 @@ def index():
 			error = 'Invalid credentials, try again!'
 
 	data = {}
+	data['public'] = None
+	data['uuid'] = None
+	data['signed_nonce'] = None
 	if request.args.get('public_key'):
-		data['public'] = request.args.get('public_key').encode('utf-8')
+		data['public'] = request.args.get('public_key')
 
 	if request.args.get('uuid'):
 		data['uuid'] = request.args.get('uuid').encode('utf-8')
 
 	if request.args.get('signed_nonce'):
-		data['signed_nonce'] = request.args.get('signed_nonce').encode('utf-8')
+		data['signed_nonce'] = request.args.get('signed_nonce')
 
-	if data != {}:
-		flash(data)
-		return redirect(url_for('index'))
+	if data != {} and data['uuid'] != None and data['public'] != None:
+	  print 'REGISTER SUCCESS'
+	  flash(data)
+	  save_in_db(data['uuid'], data['public'])
+	  return redirect(url_for('index'))
 	else:
-		public_key = None
-		uuid = None
-		signed_nonce = None
+	  flash('error')
+	  public_key = None
+	  uuid = None
+	  signed_nonce = None
 	
 	return render_template('index.html', error=error)
 
@@ -160,16 +165,28 @@ def reader_get_public_key():
 
 @app.route('/reader_smart_login', methods=['GET'])
 def reader_get_signed_nonce():
-	print 'reader_smart_login'
-
-	remote = request.args.get('return_to')
-	print remote
-	url = 'http://%s/' % remote
-	uuid, signed_nonce = py_smart_login(url)
-	data = {'uuid':uuid, 'signed_nonce':signed_nonce}
-	print data
-	para = urllib.urlencode(data)
-	return redirect("%s?%s" % (url, para))
+  remote = request.args.get('return_to')
+  print remote
+  url = 'http://%s/' % remote
+  a = ""
+  l = [hex(ord(c)) for c in url]
+  for c in l:
+    a += c[2]
+    a += c[3]
+  public_key, uuid = py_smart_login(a)
+  data = {'public_key':public_key, 'uuid':uuid}
+  print data
+  para = urllib.urlencode(data)
+  return redirect("%s?%s" % (url, para))
+	
+	#remote = request.args.get('return_to')
+	#print remote
+	#url = 'http://%s/' % remote
+	#uuid, signed_nonce = py_smart_login(url)
+	#data = {'uuid':uuid, 'signed_nonce':signed_nonce}
+	#print data
+	#para = urllib.urlencode(data)
+	#return redirect("%s?%s" % (url, para))
 
 def post(url, data):
 	req = urllib2.Request(url)
@@ -179,10 +196,13 @@ def post(url, data):
 	return response.read()  
 
 def save_in_db(username, password):
-	g.db = connect_db()
-	cur = g.db.execute("insert into USER values('%s','%s')" % (username, password))
-	g.db.commit()
-	g.db.close()
+  print 'save in db'
+  print username
+  print password
+  g.db = connect_db()
+  cur = g.db.execute("insert into USER values('%s','%s')" % (username, password))
+  g.db.commit()
+  g.db.close()
 
 def check_in_db(username, password):
 	g.db = connect_db()
