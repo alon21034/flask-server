@@ -2,8 +2,10 @@ import os
 import sqlite3
 import random
 import urllib, urllib2
+import subprocess
 from flask import *
 from functools import wraps
+
 
 app = Flask(__name__)
 
@@ -12,14 +14,17 @@ app.secret_key = 'secret'
 app.config.from_object(__name__)
 
 def py_smart_register(nonce):
+	print 'py_smart_register'
+	print nonce
+	
 	return py_get_public_key(nonce), py_get_device_UUID()
 
 def py_smart_login(nonce):
 	return py_get_device_UUID(), py_get_signed_nonce(nonce)
 
 def py_get_public_key(nonce):
-	print getCommands(["./get-signature", "%s" % nonce])
-	return getCommands(["./get-signature", "%s" % nonce])
+	return getCommands(["./get-signature", "%s" % 'aaaa'])
+	# return (hex)((int)(random.getrandbits(128)))
 
 def py_get_device_UUID():
 	return (hex)((int)(random.getrandbits(128)))
@@ -30,12 +35,14 @@ def py_get_signed_nonce(nonce):
 def getCommands(command):
   lines = ""
   output = ""
+  print command
   solver = subprocess.Popen(
       command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
   
   output += solver.communicate(lines)[0]
   while solver.poll():
 		output += solver.communicate()[0]
+  print output
   return output
 
 @app.route('/index', methods=['GET', 'POST'])
