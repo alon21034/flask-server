@@ -98,6 +98,7 @@ def index():
 	    return redirect(url_for('hello'))
 	  else:
 	    flash('wrong credentials')
+	    redirect(url_for('index'))
 	else:
 		print data
 		print 'fail'
