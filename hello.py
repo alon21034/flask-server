@@ -33,10 +33,14 @@ def py_smart_login(nonce):
 	return py_get_device_UUID(), py_get_signed_nonce(nonce)
 
 def py_get_public_key(nonce):
-	return getCommands(["./get-signature", "%s%s" % 'aaaa' nonce])
+	public_key = getCommands(["./get-signature", "%s%s" % ('aaaa', nonce)])
+	public_key = public_key[2:-1].replace(" ","")
+	return public_key
 
 def py_get_device_UUID():
-	return getCommands(["./get-signature", "%s" % 'bbbb']) 
+	uuid = getCommands(["./get-signature", "%s" % 'bbbb']) 
+	uuid = uuid[2:-1].replace(" ","")
+	return uuid
 
 def py_get_signed_nonce(nonce):
 	return (hex)((int)(random.getrandbits(128)))
@@ -68,13 +72,13 @@ def index():
 
 	data = {}
 	if request.args.get('public_key'):
-		data['public'] = request.args.get('public_key')
+		data['public'] = request.args.get('public_key').encode('utf-8')
 
 	if request.args.get('uuid'):
-		data['uuid'] = request.args.get('uuid')
+		data['uuid'] = request.args.get('uuid').encode('utf-8')
 
 	if request.args.get('signed_nonce'):
-		data['signed_nonce'] = request.args.get('signed_nonce')
+		data['signed_nonce'] = request.args.get('signed_nonce').encode('utf-8')
 
 	if data != {}:
 		flash(data)
