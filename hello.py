@@ -95,6 +95,8 @@ def index():
 	  if check_in_db(data['uuid'], data['signed_nonce']):
 	    session['logged_in'] = Ture
 	    return redirect(url_for('hello'))
+	  else:
+	    flash('wrong credentials')
 	else:
 	  # flash('error')
 	  public_key = None
