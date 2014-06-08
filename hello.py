@@ -101,11 +101,11 @@ def index():
 	else:
 		print data
 		print 'fail'
-	  # flash('error')
-	  public_key = None
-	  uuid = None
-	  signed_nonce = None
-	
+		# flash('error')
+		public_key = None
+		uuid = None
+		signed_nonce = None
+
 	return render_template('index.html', error=error)
 
 def login_required(test):
