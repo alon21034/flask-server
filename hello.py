@@ -3,6 +3,7 @@ import sqlite3
 import random
 import urllib, urllib2
 import subprocess
+import time
 from flask import *
 from functools import wraps
 
@@ -16,18 +17,19 @@ app.config.from_object(__name__)
 def py_smart_register(nonce):
 	print 'py_smart_register'
 	print nonce
-	
-	return py_get_public_key(nonce), py_get_device_UUID()
+	public_key = py_get_public_key(nonce)
+	time.sleep(1)
+	uuid = py_get_device_UUID()
+	return public_key, uuid
 
 def py_smart_login(nonce):
 	return py_get_device_UUID(), py_get_signed_nonce(nonce)
 
 def py_get_public_key(nonce):
 	return getCommands(["./get-signature", "%s" % 'aaaa'])
-	# return (hex)((int)(random.getrandbits(128)))
 
 def py_get_device_UUID():
-	return (hex)((int)(random.getrandbits(128)))
+	return getCommands(["./get-signature", "%s" % 'bbbb']) 
 
 def py_get_signed_nonce(nonce):
 	return (hex)((int)(random.getrandbits(128)))
