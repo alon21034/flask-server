@@ -8,28 +8,19 @@
   	<p class=error><strong> Error: </strong> {{ error }}
   {% endif %}
 
-  <form action="" method=post>
-		<input type=text name=username>
-		<input type=password name=password>
-		<input type=submit value=Login>
-	</form>
-
   {% for message in get_flashed_messages() %}
 		<div class=flash>
 		{{ message }}
 		</div>
   {% endfor %}
 
-  <form action="/get_public_key" method=get>
-  	<input type=submit value=Login>
-  </form>
   </br>
   <form action="/smart_register" method=get>
-    <input type=submit value=Smart Register>
+    <input type=submit value="Smart Register" width=500 height=200>
   </form>
   </br>
   <form action="/smart_login" method=get>
-    <input type=submit value=Smart Login>
+    <input type=submit value="Smart Login" width=500 height=200>
   </form>
 
   {% if public_key %}

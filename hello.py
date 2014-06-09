@@ -19,7 +19,7 @@ def py_smart_register(nonce):
 	print nonce
 	public_key = py_get_public_key(nonce)
 
-	time.sleep(1)
+	time.sleep(3)
 	uuid = py_get_device_UUID()
 	return public_key, uuid
 
