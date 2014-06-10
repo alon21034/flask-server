@@ -1,12 +1,14 @@
-<html>
-  <head>
-    <title>Title</title>
-  </head>
-  <h1>Login</h1>
-
-  {% if error %}
-  	<p class=error><strong> Error: </strong> {{ error }}
-  {% endif %}
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NFC Auth Solution</title>
+  <link rel="stylesheet" type="text/css" href="auth.css" />
+</head>
+<body>
+  <div class="header">
+    <h1 class="header-text">NFC Auth Solution</h1>
+  </div>
 
   {% for message in get_flashed_messages() %}
 		<div class=flash>
@@ -14,21 +16,18 @@
 		</div>
   {% endfor %}
 
-  </br>
-  <form action="/smart_register" method=get>
-    <input type=submit value="Smart Register" width=500 height=200>
-  </form>
-  </br>
-  <form action="/smart_login" method=get>
-    <input type=submit value="Smart Login" width=500 height=200>
-  </form>
-
-  {% if public_key %}
-    <p class=error><strong>Test: </strong>{{ public_key }}
-  {% endif %}
-
-</br>
-</br>
-</br>
-</br>
+  <div class="auth">
+    <div class="auth-header">
+      <h1 class="auth-header-text">Login</h1>
+    </div>
+    <div class="auth-body">
+      <form action="/smart_register" method="get">
+        <input class="button" type="submit" value="Smart Register" />
+      </form>
+      <form action="/smart_login" method="get">
+        <input class="button" type="submit" value="Smart Login" />
+      </form>
+    </div>
+  </div>
+</body>
 </html>

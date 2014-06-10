@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title>Title</title>
+  </head>
+  <h1>Login</h1>
+
+  {% if error %}
+  	<p class=error><strong> Error: </strong> {{ error }}
+  {% endif %}
+
+  {% for message in get_flashed_messages() %}
+		<div class=flash>
+		{{ message }}
+		</div>
+  {% endfor %}
+
+  </br>
+  <form action="/smart_register" method=get>
+    <input type=submit value="Smart Register" width=500 height=200>
+  </form>
+  </br>
+  <form action="/smart_login" method=get>
+    <input type=submit value="Smart Login" width=500 height=200>
+  </form>
+
+  {% if public_key %}
+    <p class=error><strong>Test: </strong>{{ public_key }}
+  {% endif %}
+
+</br>
+</br>
+</br>
+</br>
+</html>
