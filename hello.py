@@ -92,7 +92,7 @@ def index():
 	  return redirect(url_for('index'))
 	elif data != {} and data['uuid'] != None and data['public'] == None and data['signed_nonce'] != None:
 	  print 'LOGIN TEST'
-	  flash(data)
+	  # flash(data)
 	  if check_in_db(data['uuid'], data['signed_nonce']):
 	    session['logged_in'] = True
 	    return redirect(url_for('hello'))
