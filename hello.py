@@ -15,20 +15,21 @@ app.secret_key = 'secret'
 app.config.from_object(__name__)
 
 def py_smart_register(nonce):
-	print 'py_smart_register'
-	print nonce
-	public_key = py_get_public_key(nonce)
-
-	time.sleep(3)
-	uuid = py_get_device_UUID()
-	return public_key, uuid
+  print 'py_smart_register'
+  print nonce
+  uuid = py_get_device_UUID()
+  public_key = py_get_public_key(nonce)
+  time.sleep(3)
+	# uuid = py_get_device_UUID()
+  return public_key, uuid
 
 def py_smart_login(nonce):
   print 'py_smart_login'
   print nonce
+  uuid = py_get_device_UUID()
   signed_nonce = py_get_signed_nonce(nonce)
   time.sleep(1)
-  uuid = py_get_device_UUID()
+  # uuid = py_get_device_UUID()
   return signed_nonce, uuid
 
 def py_get_public_key(nonce):
@@ -87,7 +88,7 @@ def index():
 	print data
 	if data != {} and data['uuid'] != None and data['public'] != None and data['signed_nonce'] == None:
 	  print 'REGISTER SUCCESS'
-	  flash(data)
+	  # flash(data)
 	  save_in_db(data['uuid'], data['public'])
 	  return redirect(url_for('index'))
 	elif data != {} and data['uuid'] != None and data['public'] == None and data['signed_nonce'] != None:
