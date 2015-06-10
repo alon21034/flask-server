@@ -34,19 +34,19 @@ def py_smart_login(nonce):
 
 def py_get_public_key(nonce):
 	public_key = getCommands(["./get-public-key", "%s" % "cccc"])
-	public_key = public_key[51:-1].replace(" ","")
+	public_key = public_key.split('\n')[-2][1:].replace(" ","")
 	print 'py_get_public_key', public_key
 	return public_key
 
 def py_get_device_UUID():
 	uuid = getCommands(["./get-uuid", "%s" % 'bbbb']) 
-	uuid = uuid[45:-1].replace(" ","")
+	uuid = uuid.split('\n')[-2][1:].replace(" ","")
 	print 'py_get_device_UUID', uuid
 	return uuid
 
 def py_get_signed_nonce(nonce):
 	signed_nonce = getCommands(["./get-signature", "%s%s" % ('aaaa', nonce)])
-	signed_nonce = signed_nonce[32:-1].replace(" ","")
+	signed_nonce = signed_nonce.split('\n')[-2][1:].replace(" ","")
 	print 'py_get_signed_nonce', signed_nonce
 	return signed_nonce
 
