@@ -46,7 +46,8 @@ def py_get_device_UUID():
 
 def py_get_signed_nonce(nonce):
 	signed_nonce = getCommands(["./get-signature", "%s%s" % ('aaaa', nonce)])
-	signed_nonce = signed_nonce[6:-7].replace(" ","")
+	signed_nonce = signed_nonce[32:-1].replace(" ","")
+	print 'py_get_signed_nonce', signed_nonce
 	return signed_nonce
 
 def getCommands(command):
